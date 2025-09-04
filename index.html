@@ -4,6 +4,134 @@
     <meta charset="UTF-8">
     <title>Juned Academy IELTS Writing Mock Test</title>
     <style>
+        /* Login Page Styles */
+        #loginPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+        
+        .login-container {
+            width: 500px;
+            padding: 30px;
+            border: 2px solid #cc0000;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        
+        .login-title {
+            text-align: center;
+            color: #cc0000;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .login-field {
+            margin-bottom: 15px;
+        }
+        
+        .login-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .login-field input, .login-field select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .test-type {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .test-type-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .start-test-btn {
+            background: linear-gradient(to bottom, #ff3333, #cc0000);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        /* Results Page Styles */
+        #resultsPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            padding: 40px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .results-content {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .student-info {
+            flex: 1;
+            border-right: 1px solid #ccc;
+            padding-right: 20px;
+        }
+        
+        .writing-results {
+            flex: 2;
+        }
+        
+        .writing-task {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .download-btn {
+            background: linear-gradient(to bottom, #004080, #00264d);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        /* Existing Styles (with small modifications) */
         html, body {
             margin: 0;
             padding: 0;
@@ -43,6 +171,17 @@
         .timer-text {
             font-size: 14px;
         }
+        
+        .submit-btn {
+            background: linear-gradient(to bottom, #004080, #00264d);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
 
         .main-content {
             display: flex;
@@ -66,7 +205,7 @@
             max-width: 100%;
             max-height: 100%;
             transition: transform 0.3s ease;
-            cursor: zoom-in; /* Default cursor */
+            cursor: zoom-in;
             position: relative;
             z-index: 1;
         }
@@ -103,12 +242,13 @@
 
         textarea {
             width: 90%;
-            height: 80%;
+            height: 80%; /* Increased height */
+            min-height: 400px; /* Minimum height to ensure it's not too small */
             border: 2px solid black;
             border-radius: 5px;
             font-size: 16px;
             padding: 10px;
-            resize: none;
+            resize: vertical; /* Allow vertical resizing */
         }
 
         .word-counter {
@@ -157,56 +297,201 @@
 </head>
 <body>
 
-<div class="header">
-    <img src="https://github.com/kawsarahmedeeeee-png/writing-/blob/main/Bold.png?raw=true" alt="Juned Academy Logo">
-    <div class="timer-section">
-        <img src="https://github.com/kawsarahmedeeeee-png/writing-/blob/main/pngwing.com.png?raw=true" alt="Clock" style="height: 30px;">
-        <div class="timer" id="timer">60:00</div>
-        <div class="timer-text">Minutes remaining</div>
-    </div>
-</div>
-
-<div class="main-content">
-    <div class="task-image" id="taskImage">
-        <img id="taskImageElement" src="https://github.com/kawsarahmedeeeee-png/writing-/blob/main/task1.jpg?raw=true.jpg" alt="Task 1 Image" style="transform: scale(1);" onclick="toggleZoom()">
-    </div>
-
-    <div class="splitter" id="splitter"></div>
-
-    <div class="writing-section">
-        <div class="top-bar">
-            <div class="task-title" id="taskTitle">Writing Task 1</div>
-            <div class="font-controls">
-                <button onclick="adjustFontSize(1)">A+</button>
-                <button onclick="adjustFontSize(-1)">A-</button>
+<!-- Login Page -->
+<div id="loginPage">
+    <div class="login-container">
+        <div class="login-title">IELTS Mock Test</div>
+        
+        <div class="login-field">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" placeholder="Enter your full name">
+        </div>
+        
+        <div class="login-field">
+            <label for="candidateNumber">Candidate Number:</label>
+            <input type="text" id="candidateNumber" placeholder="Enter candidate number">
+        </div>
+        
+        <div class="login-field">
+            <label>Test Type:</label>
+            <div class="test-type">
+                <div class="test-type-option">
+                    <input type="radio" id="generalTraining" name="testType" value="General Training">
+                    <label for="generalTraining">General Training</label>
+                </div>
+                <div class="test-type-option">
+                    <input type="radio" id="academic" name="testType" value="Academic" checked>
+                    <label for="academic">Academic</label>
+                </div>
             </div>
         </div>
-        <textarea id="writingArea" spellcheck="false"></textarea>
-        <div class="word-counter" id="wordCounter">Word Count: 0</div>
+        
+        <div class="login-field">
+            <label for="testDate">Test Date:</label>
+            <input type="date" id="testDate">
+        </div>
+        
+        <button class="start-test-btn" onclick="startTest()">Start Test</button>
     </div>
 </div>
 
-<div class="bottom-buttons">
-    <button onclick="switchTask(1)">Task 1</button>
-    <button onclick="switchTask(2)">Task 2</button>
+<!-- Main Test Interface (initially hidden) -->
+<div id="testInterface" style="display: none;">
+    <div class="header">
+        <img src="Bold.png" alt="Juned Academy Logo">
+        <div class="timer-section">
+            <img src="pngwing.com.png" alt="Clock" style="height: 30px;">
+            <div class="timer" id="timer">60:00</div>
+            <div class="timer-text">Minutes remaining</div>
+            <button class="submit-btn" onclick="showResults()">Submit Test</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="task-image" id="taskImage">
+            <img id="taskImageElement" src="https://github.com/kawsarahmedeeeee-png/writing-/blob/main/Writing%20AC%205_page-0001%20(1).jpg?raw=true" alt="Task Image" style="transform: scale(1);" onclick="toggleZoom()">
+        </div>
+
+        <div class="splitter" id="splitter"></div>
+
+        <div class="writing-section">
+            <div class="top-bar">
+                <div class="task-title" id="taskTitle">Writing Task 1</div>
+                <div class="font-controls">
+                    <button onclick="adjustFontSize(1)">A+</button>
+                    <button onclick="adjustFontSize(-1)">A-</button>
+                </div>
+            </div>
+            <textarea id="writingArea" spellcheck="false"></textarea>
+            <div class="word-counter" id="wordCounter">Word Count: 0</div>
+        </div>
+    </div>
+
+    <div class="bottom-buttons">
+        <button onclick="switchTask(1)">Task 1</button>
+        <button onclick="switchTask(2)">Task 2</button>
+    </div>
+</div>
+
+<!-- Results Page (initially hidden) -->
+<div id="resultsPage">
+    <div class="results-header">
+        <h2>IELTS Writing Test Submission</h2>
+        <p>Test successfully submitted on <span id="submissionDate"></span></p>
+        <button class="download-btn" onclick="downloadResults()">Download Answers</button>
+    </div>
+    
+    <div class="results-content">
+        <div class="student-info">
+            <h3>Student Information</h3>
+            <p><strong>Name:</strong> <span id="resultName"></span></p>
+            <p><strong>Candidate Number:</strong> <span id="resultCandidateNumber"></span></p>
+            <p><strong>Test Type:</strong> <span id="resultTestType"></span></p>
+            <p><strong>Test Date:</strong> <span id="resultTestDate"></span></p>
+        </div>
+        
+        <div class="writing-results">
+            <div class="writing-task">
+                <h3>Writing Task 1</h3>
+                <div id="writingTask1Result" class="writing-content"></div>
+            </div>
+            
+            <div class="writing-task">
+                <h3>Writing Task 2</h3>
+                <div id="writingTask2Result" class="writing-content"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+    // Login and Navigation Functions
+    function startTest() {
+        const fullName = document.getElementById('fullName').value;
+        const candidateNumber = document.getElementById('candidateNumber').value;
+        const testDate = document.getElementById('testDate').value;
+        
+        if (!fullName || !candidateNumber || !testDate) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        localStorage.setItem('studentFullName', fullName);
+        localStorage.setItem('studentCandidateNumber', candidateNumber);
+        localStorage.setItem('studentTestType', document.querySelector('input[name="testType"]:checked').value);
+        localStorage.setItem('studentTestDate', testDate);
+        
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('testInterface').style.display = 'block';
+        
+        startTimer();
+    }
+    
+    function showResults() {
+        clearInterval(timerInterval);
+        
+        document.getElementById('resultName').textContent = localStorage.getItem('studentFullName');
+        document.getElementById('resultCandidateNumber').textContent = localStorage.getItem('studentCandidateNumber');
+        document.getElementById('resultTestType').textContent = localStorage.getItem('studentTestType');
+        document.getElementById('resultTestDate').textContent = localStorage.getItem('studentTestDate');
+        
+        const now = new Date();
+        document.getElementById('submissionDate').textContent = now.toLocaleString();
+        
+        document.getElementById('writingTask1Result').textContent = localStorage.getItem('writingContent1') || 'No content submitted for Task 1';
+        document.getElementById('writingTask2Result').textContent = localStorage.getItem('writingContent2') || 'No content submitted for Task 2';
+        
+        document.getElementById('testInterface').style.display = 'none';
+        document.getElementById('resultsPage').style.display = 'flex';
+    }
+
+    function downloadResults() {
+        const name = localStorage.getItem('studentFullName');
+        const candidateNumber = localStorage.getItem('studentCandidateNumber');
+        const testType = localStorage.getItem('studentTestType');
+        const testDate = localStorage.getItem('studentTestDate');
+        const task1 = localStorage.getItem('writingContent1') || 'No content submitted for Task 1';
+        const task2 = localStorage.getItem('writingContent2') || 'No content submitted for Task 2';
+        
+        const content = 
+`IELTS Writing Mock Test Submission
+---------------------------------
+Name: ${name}
+Candidate Number: ${candidateNumber}
+Test Type: ${testType}
+Test Date: ${testDate}
+
+--- Task 1 Answer ---
+${task1}
+
+--- Task 2 Answer ---
+${task2}
+`;
+        const blob = new Blob([content], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${name}_IELTS_Writing.txt`;
+        link.click();
+    }
+
     // Timer Functionality
     let totalTime = 60 * 60;
     const timerElement = document.getElementById('timer');
+    let timerInterval;
 
     function startTimer() {
-        setInterval(() => {
-            if (totalTime <= 0) return;
+        timerInterval = setInterval(() => {
+            if (totalTime <= 0) {
+                clearInterval(timerInterval);
+                showResults();
+                return;
+            }
             totalTime--;
             let minutes = Math.floor(totalTime / 60);
             let seconds = totalTime % 60;
             timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }, 1000);
     }
-
-    startTimer();
 
     // Autosave and Word Count
     const textarea = document.getElementById('writingArea');
@@ -231,7 +516,6 @@
         currentTask = taskNumber;
 
         document.getElementById('taskTitle').textContent = 'Writing Task ' + taskNumber;
-        document.getElementById('taskImageElement').src = `task${taskNumber}.png`;
         textarea.value = localStorage.getItem('writingContent' + currentTask) || '';
         updateWordCount();
         resetZoom();
@@ -275,10 +559,10 @@
 
     function toggleZoom() {
         if (currentZoom === 1) {
-            currentZoom = 1.5; // Zoom in
+            currentZoom = 1.5;
             document.getElementById('taskImageElement').style.cursor = 'zoom-out';
         } else {
-            currentZoom = 1; // Reset
+            currentZoom = 1;
             document.getElementById('taskImageElement').style.cursor = 'zoom-in';
         }
         document.getElementById('taskImageElement').style.transform = `scale(${currentZoom})`;
@@ -290,13 +574,21 @@
         image.style.transform = `scale(${currentZoom})`;
         image.style.cursor = 'zoom-in';
     }
+    
+    // Set today's date as default for the test date
+    window.onload = function() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1;
+        let dd = today.getDate();
+        
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        
+        const formattedToday = `${yyyy}-${mm}-${dd}`;
+        document.getElementById('testDate').value = formattedToday;
+    };
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
